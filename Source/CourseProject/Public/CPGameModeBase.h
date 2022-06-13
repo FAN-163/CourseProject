@@ -13,4 +13,7 @@ UCLASS()
 class COURSEPROJECT_API ACPGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
+    
+public:
+    ACPGameModeBase();
 };
