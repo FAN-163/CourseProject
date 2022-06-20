@@ -3,6 +3,7 @@
 
 #include "Player/CPBaseCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 ACPBaseCharacter::ACPBaseCharacter()
@@ -34,5 +35,18 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &ACPBaseCharacter::MoveForward);
+    PlayerInputComponent->BindAxis("MoveRight", this, &ACPBaseCharacter::MoveRight);
+
+}
+
+void ACPBaseCharacter::MoveForward(float Amount) 
+{
+    AddMovementInput(GetActorForwardVector(), Amount);
+}
+
+void ACPBaseCharacter::MoveRight(float Amount) 
+{
+    AddMovementInput(GetActorRightVector(), Amount);
 }
 
