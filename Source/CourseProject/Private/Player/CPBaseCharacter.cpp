@@ -39,6 +39,7 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &ACPBaseCharacter::MoveRight);
     PlayerInputComponent->BindAxis("LookUp", this, &ACPBaseCharacter::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("TurnAround", this, &ACPBaseCharacter::AddControllerYawInput);
+    PlayerInputComponent->BindAction("Jump",IE_Pressed, this, &ACPBaseCharacter::Jump);
 }
 
 void ACPBaseCharacter::MoveForward(float Amount)
