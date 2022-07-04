@@ -9,6 +9,8 @@
 #include "Components/CPHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
+
 ACPBaseCharacter::ACPBaseCharacter(const FObjectInitializer& ObjInit)
     : Super(ObjInit.SetDefaultSubobjectClass<UCPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -41,7 +43,10 @@ void ACPBaseCharacter::Tick(float DeltaTime)
 
     const auto Health = HealthComponent->GetHealth();
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+
+    TakeDamage(0.1, FDamageEvent(), Controller, this);
 }
+
 
 void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
