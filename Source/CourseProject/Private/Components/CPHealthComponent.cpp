@@ -2,8 +2,6 @@
 
 #include "Components/CPHealthComponent.h"
 #include "GameFramework/Actor.h"
-#include "Dev/CPIceDamageType.h"
-#include "Dev/CPFireDamageType.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
 
@@ -18,6 +16,8 @@ void UCPHealthComponent::BeginPlay()
 
     Health = MaxHealth;
 
+    OnHealthChanged.Broadcast(Health);
+
     AActor* ComponentOwner = GetOwner();
     if (ComponentOwner)
     {
@@ -28,18 +28,13 @@ void UCPHealthComponent::BeginPlay()
 void UCPHealthComponent::OnTakeAnyDamageHandle(
     AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-    Health -= Damage;
-    UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage);
+    if (Damage <= 0.0f || IsDead()) return;
 
-    if (DamageType)
+    Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+    OnHealthChanged.Broadcast(Health);
+
+    if (IsDead())
     {
-        if (DamageType->IsA<UCPFireDamageType>())
-        {
-            UE_LOG(LogHealthComponent, Display, TEXT("So hoot"));
-        }
-        else if (DamageType->IsA<UCPIceDamageType>())
-        {
-            UE_LOG(LogHealthComponent, Display, TEXT("So coold"));
-        }
+        OnDeath.Broadcast();
     }
 }
