@@ -12,7 +12,7 @@ public class CourseProject : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-		PublicIncludePaths.AddRange(new string[] { "CourseProject/Public/Player" , "CourseProject/Public/Components" });
+		PublicIncludePaths.AddRange(new string[] { "CourseProject/Public/Player" , "CourseProject/Public/Components", "CourseProject/Public/Dev" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
