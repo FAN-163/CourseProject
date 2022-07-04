@@ -23,7 +23,8 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/Player", 
             "CourseProject/Public/Components", 
             "CourseProject/Public/Dev",
-            "CourseProject/Public/Weapon"
+            "CourseProject/Public/Weapon",
+            "CourseProject/Public/UI"
         });
 
         // Uncomment if you are using Slate UI
