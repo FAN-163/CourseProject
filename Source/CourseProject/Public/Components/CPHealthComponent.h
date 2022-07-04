@@ -9,7 +9,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnDead);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent)) 
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class COURSEPROJECT_API UCPHealthComponent : public UActorComponent
 {
     GENERATED_BODY()
@@ -17,13 +17,13 @@ class COURSEPROJECT_API UCPHealthComponent : public UActorComponent
 public:
     UCPHealthComponent();
 
-    float GetHealth() const { return Health; }
+    FOnDead OnDeath;
+    FOnHealthChanged OnHealthChanged;
 
     UFUNCTION(BlueprintCallable)
     bool IsDead() const { return FMath::IsNearlyZero(Health); }
 
-    FOnDead OnDeath;
-    FOnHealthChanged OnHealthChanged;
+    float GetHealth() const { return Health; }
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (clampMin = "0.0", ClampMax = "1000.0"))

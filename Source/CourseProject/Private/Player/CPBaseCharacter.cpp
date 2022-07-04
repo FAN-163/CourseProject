@@ -10,7 +10,7 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Controller.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All)
 
 ACPBaseCharacter::ACPBaseCharacter(const FObjectInitializer& ObjInit)
     : Super(ObjInit.SetDefaultSubobjectClass<UCPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -41,6 +41,8 @@ void ACPBaseCharacter::BeginPlay()
     OnHealthChanged(HealthComponent->GetHealth());
     HealthComponent->OnDeath.AddUObject(this, &ACPBaseCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ACPBaseCharacter::OnHealthChanged);
+
+    LandedDelegate.AddDynamic(this, &ACPBaseCharacter::OnGroundLanded);
 }
 
 void ACPBaseCharacter::OnHealthChanged(float Health)
@@ -56,6 +58,8 @@ void ACPBaseCharacter::Tick(float DeltaTime)
 void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    check(PlayerInputComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &ACPBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ACPBaseCharacter::MoveRight);
@@ -110,9 +114,21 @@ void ACPBaseCharacter::OnDeath()
 
     PlayAnimMontage(DeathAnimMontage);
     GetCharacterMovement()->DisableMovement();
-    SetLifeSpan(5.0f);
+    SetLifeSpan(LifeSpanOnDeath);
     if (Controller)
     {
         Controller->ChangeState(NAME_Spectating);
     }
+}
+
+void ACPBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+    const auto FallVelocityZ = -GetVelocity().Z;
+   
+    if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+    const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+    UE_LOG(LogBaseCharacter, Display, TEXT("FinalDamage: %f"), FinalDamage);
+    
+    TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
