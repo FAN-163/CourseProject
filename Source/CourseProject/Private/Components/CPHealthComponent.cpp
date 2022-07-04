@@ -2,6 +2,8 @@
 
 #include "Components/CPHealthComponent.h"
 #include "GameFramework/Actor.h"
+#include "Dev/CPIceDamageType.h"
+#include "Dev/CPFireDamageType.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
 
@@ -28,4 +30,16 @@ void UCPHealthComponent::OnTakeAnyDamageHandle(
 {
     Health -= Damage;
     UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage);
+
+    if (DamageType)
+    {
+        if (DamageType->IsA<UCPFireDamageType>())
+        {
+            UE_LOG(LogHealthComponent, Display, TEXT("So hoot"));
+        }
+        else if (DamageType->IsA<UCPIceDamageType>())
+        {
+            UE_LOG(LogHealthComponent, Display, TEXT("So coold"));
+        }
+    }
 }
