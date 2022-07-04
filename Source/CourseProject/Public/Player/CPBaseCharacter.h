@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UCPHealthComponent;
 class UTextRenderComponent;
+class ACPBaseWeapon;
     
 UCLASS()
 class COURSEPROJECT_API ACPBaseCharacter : public ACharacter
@@ -43,6 +44,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Weapone")
+    TSubclassOf<ACPBaseWeapon> WeaponClass;
 
     virtual void BeginPlay() override;
 
@@ -73,4 +77,6 @@ private:
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
+
+    void SpawnWeapon();
 };
