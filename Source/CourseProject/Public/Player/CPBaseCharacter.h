@@ -8,7 +8,9 @@
 
 class UCameraComponent;
 class USpringArmComponent;
-
+class UCPHealthComponent;
+class UTextRenderComponent;
+    
 UCLASS()
 class COURSEPROJECT_API ACPBaseCharacter : public ACharacter
 {
@@ -23,6 +25,12 @@ protected:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UCameraComponent* CameraComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UCPHealthComponent* HealthComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UTextRenderComponent* HealthTextComponent;
 
     virtual void BeginPlay() override;
 

@@ -6,6 +6,8 @@
 #include "CPBaseCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CPCharacterMovementComponent.h"
+#include "Components/CPHealthComponent.h"
+#include "Components/TextRenderComponent.h"
 
 ACPBaseCharacter::ACPBaseCharacter(const FObjectInitializer& ObjInit)
     : Super(ObjInit.SetDefaultSubobjectClass<UCPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -18,21 +20,29 @@ ACPBaseCharacter::ACPBaseCharacter(const FObjectInitializer& ObjInit)
     
     CameraComponent = CreateAbstractDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
+
+    HealthComponent = CreateDefaultSubobject<UCPHealthComponent>("HealthComponent");
+    
+    HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
+    HealthTextComponent->SetupAttachment(GetRootComponent());
 }
 
-// Called when the game starts or when spawned
 void ACPBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
+    check(HealthComponent);
+    check(HealthTextComponent);
 }
 
-// Called every frame
 void ACPBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    const auto Health = HealthComponent->GetHealth();
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
-// Called to bind functionality to input
 void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
