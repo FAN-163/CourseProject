@@ -9,6 +9,7 @@
 #include "Components/CPHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/CPWeaponComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
 
 
@@ -127,6 +128,7 @@ void ACPBaseCharacter::OnDeath()
     {
         Controller->ChangeState(NAME_Spectating);
     }
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
 void ACPBaseCharacter::OnGroundLanded(const FHitResult& Hit)

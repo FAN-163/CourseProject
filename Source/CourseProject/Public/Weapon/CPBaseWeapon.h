@@ -29,10 +29,14 @@ protected:
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
     float TraceMaxDistance = 1500.0f;
 
+    UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
+    float DamageAmount = 10.0f;
+
     virtual void BeginPlay() override;
 
     void MakeShot();
     void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd);
+    void MakeDamage(const FHitResult& HitResult);
    
     APlayerController* GetPlayerController() const;
     
