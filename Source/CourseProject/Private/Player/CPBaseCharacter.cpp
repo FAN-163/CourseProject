@@ -8,8 +8,9 @@
 #include "Components/CPCharacterMovementComponent.h"
 #include "Components/CPHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/CPWeaponComponent.h"
 #include "GameFramework/Controller.h"
-#include "Weapon/CPBaseWeapon.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All)
 
@@ -31,6 +32,8 @@ ACPBaseCharacter::ACPBaseCharacter(const FObjectInitializer& ObjInit)
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
     HealthTextComponent->SetOwnerNoSee(true);
+
+    WeaponComponent = CreateDefaultSubobject<UCPWeaponComponent>("WeaponComponent");
 }
 
 void ACPBaseCharacter::BeginPlay()
@@ -46,8 +49,6 @@ void ACPBaseCharacter::BeginPlay()
     HealthComponent->OnHealthChanged.AddUObject(this, &ACPBaseCharacter::OnHealthChanged);
 
     LandedDelegate.AddDynamic(this, &ACPBaseCharacter::OnGroundLanded);
-
-    SpawnWeapon();
 }
 
 void ACPBaseCharacter::OnHealthChanged(float Health)
@@ -65,6 +66,7 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     check(PlayerInputComponent);
+    check(WeaponComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &ACPBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ACPBaseCharacter::MoveRight);
@@ -73,6 +75,7 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACPBaseCharacter::Jump);
     PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ACPBaseCharacter::OnStartRunning);
     PlayerInputComponent->BindAction("Run", IE_Released, this, &ACPBaseCharacter::OnStopRunning);
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::Fire);
 }
 
 bool ACPBaseCharacter::IsRunning() const
@@ -137,14 +140,4 @@ void ACPBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 
     TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
-void ACPBaseCharacter::SpawnWeapon()
-{
-    if (!GetWorld()) return;
 
-    const auto Weapon = GetWorld()->SpawnActor<ACPBaseWeapon>(WeaponClass);
-    if (Weapon)
-    {
-        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-        Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
-    }
-}

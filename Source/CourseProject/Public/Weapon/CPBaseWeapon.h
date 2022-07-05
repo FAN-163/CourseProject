@@ -16,6 +16,8 @@ class COURSEPROJECT_API ACPBaseWeapon : public AActor
 public:
     ACPBaseWeapon();
 
+    virtual void Fire();
+
 protected:
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
     USkeletalMeshComponent* WeaponMesh;
