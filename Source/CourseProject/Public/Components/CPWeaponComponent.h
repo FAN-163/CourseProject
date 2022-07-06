@@ -16,7 +16,8 @@ class COURSEPROJECT_API UCPWeaponComponent : public UActorComponent
 public:
     UCPWeaponComponent();
 
-    void Fire();
+    void StartFire();
+    void StopFire();
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")

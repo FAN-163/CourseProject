@@ -22,9 +22,14 @@ void ACPBaseWeapon::BeginPlay()
     Super::BeginPlay();
 }
 
-void ACPBaseWeapon::Fire()
+void ACPBaseWeapon::StartFire()
 {
     MakeShot();
+    GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ACPBaseWeapon::MakeShot, TimeBetweenShots, true);
+}
+void ACPBaseWeapon::StopFire()
+{
+    GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
 void ACPBaseWeapon::MakeShot()
@@ -78,7 +83,8 @@ bool ACPBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     if (!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
     TraceStart = ViewLocation;
-    const FVector ShootDirection = ViewRotation.Vector();
+    const auto HalfRad = FMath::DegreesToRadians(BulletSpread);
+    const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
     TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
     return true;
 }
