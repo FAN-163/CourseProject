@@ -78,6 +78,7 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("Run", IE_Released, this, &ACPBaseCharacter::OnStopRunning);
     PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::StartFire);
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UCPWeaponComponent::StopFire);
+    PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UCPWeaponComponent::NextWeapon);
 }
 
 bool ACPBaseCharacter::IsRunning() const
@@ -130,6 +131,7 @@ void ACPBaseCharacter::OnDeath()
         Controller->ChangeState(NAME_Spectating);
     }
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    WeaponComponent->StopFire();
 }
 
 void ACPBaseCharacter::OnGroundLanded(const FHitResult& Hit)
