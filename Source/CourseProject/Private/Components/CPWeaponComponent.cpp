@@ -3,6 +3,9 @@
 #include "Components/CPWeaponComponent.h"
 #include "Weapon/CPBaseWeapon.h"
 #include "GameFramework/Character.h"
+#include "Animation/CPFinishedAnimNotify.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All)
 
 UCPWeaponComponent::UCPWeaponComponent()
 {
@@ -14,11 +17,13 @@ void UCPWeaponComponent::BeginPlay()
     Super::BeginPlay();
 
     CurrentWeaponIndex = 0;
+    InitAnimations();
     SpawnWeapons();
     EquipWeapon(CurrentWeaponIndex);
 }
 
-void UCPWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+void UCPWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
     CurrentWeapon = nullptr;
     for (auto Weapon : Weapons)
     {
@@ -68,6 +73,7 @@ void UCPWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     CurrentWeapon = Weapons[WeaponIndex];
     AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
+    PlayAnimMontage(EquipAnimMontage);
 }
 
 void UCPWeaponComponent::StartFire()
@@ -85,4 +91,38 @@ void UCPWeaponComponent::NextWeapon()
 {
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
+}
+
+void UCPWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
+{
+    ACharacter* Character = Cast<ACharacter>(GetOwner());
+    if (!Character) return;
+
+    Character->PlayAnimMontage(Animation);
+}
+
+void UCPWeaponComponent::InitAnimations()
+{
+    if (!EquipAnimMontage) return;
+
+    const auto NotifyEvents = EquipAnimMontage->Notifies;
+    for (auto NotifyEvent : NotifyEvents)
+    {
+        auto EquipFinishedNotify = Cast<UCPFinishedAnimNotify>(NotifyEvent.Notify);
+        if (EquipFinishedNotify)
+        {
+            EquipFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnEquipFinished);
+            break;
+        }
+    }
+}
+void UCPWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
+{
+    ACharacter* Character = Cast<ACharacter>(GetOwner());
+    if (!Character) return;
+
+    if (Character->GetMesh() == MeshComponent)
+    {
+        UE_LOG(LogWeaponComponent, Display, TEXT("Equip finished"));
+    }
 }
