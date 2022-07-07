@@ -3,7 +3,6 @@
 #include "Weapon/CPLauncherWeapon.h"
 #include "Weapon/CPProjectile.h"
 
-
 void ACPLauncherWeapon::StartFire()
 {
     MakeShot();
@@ -27,6 +26,7 @@ void ACPLauncherWeapon::MakeShot()
     if (Projectile)
     {
         Projectile->SetShotDirection(Direction);
+        Projectile->SetOwner(GetOwner());
         Projectile->FinishSpawning(SpawnTransform);
     }
-    }
+}

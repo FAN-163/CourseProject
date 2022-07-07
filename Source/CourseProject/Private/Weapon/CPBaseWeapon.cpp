@@ -77,10 +77,4 @@ void ACPBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
- void ACPBaseWeapon::MakeDamage(const FHitResult& HitResult) 
- {
-     const auto DamageActor = HitResult.GetActor();
-     if (!DamageActor) return;
-
-     DamageActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
- }
+ 
