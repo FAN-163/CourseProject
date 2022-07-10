@@ -10,7 +10,7 @@ void ACPLauncherWeapon::StartFire()
 
 void ACPLauncherWeapon::MakeShot()
 {
-    if (!GetWorld()) return;
+    if (!GetWorld() || IsAmmoEmpty()) return;
 
     FVector TraceStart, TraceEnd;
     if (!GetTraceData(TraceStart, TraceEnd)) return;
@@ -29,4 +29,6 @@ void ACPLauncherWeapon::MakeShot()
         Projectile->SetOwner(GetOwner());
         Projectile->FinishSpawning(SpawnTransform);
     }
+
+    DecreaseAmmo();
 }

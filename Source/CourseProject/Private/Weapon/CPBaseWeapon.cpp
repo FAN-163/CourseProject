@@ -20,18 +20,14 @@ ACPBaseWeapon::ACPBaseWeapon()
 void ACPBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
+
+    CurrentAmmo = DefaultAmmo;
 }
 
-void ACPBaseWeapon::StartFire()
-{
-}
-void ACPBaseWeapon::StopFire()
-{
-}
+void ACPBaseWeapon::StartFire() {}
+void ACPBaseWeapon::StopFire() {}
 
-void ACPBaseWeapon::MakeShot()
-{
-}
+void ACPBaseWeapon::MakeShot() {}
 
 APlayerController* ACPBaseWeapon::GetPlayerController() const
 {
@@ -67,7 +63,7 @@ bool ACPBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     return true;
 }
 
-void ACPBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) 
+void ACPBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd)
 {
     if (!GetWorld()) return;
 
@@ -77,4 +73,40 @@ void ACPBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
- 
+void ACPBaseWeapon::DecreaseAmmo()
+{
+    CurrentAmmo.Bullets--;
+    LogAmmo();
+
+    if (IsClipEmpty() && !IsAmmoEmpty())
+    {
+        ChangeClip();
+    }
+}
+
+bool ACPBaseWeapon::IsAmmoEmpty() const
+{
+    return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+}
+
+bool ACPBaseWeapon::IsClipEmpty() const
+{
+    return CurrentAmmo.Bullets == 0;
+}
+
+void ACPBaseWeapon::ChangeClip()
+{
+    CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+    if (!CurrentAmmo.Infinite)
+    {
+        CurrentAmmo.Clips--;
+    }
+    UE_LOG(LogBaseWeapon, Display, TEXT("-------Change Clip-------"));
+}
+
+void ACPBaseWeapon::LogAmmo()
+{
+    FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
+    AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
+    UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
+}
