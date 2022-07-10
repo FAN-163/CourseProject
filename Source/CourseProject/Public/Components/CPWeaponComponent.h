@@ -8,6 +8,18 @@
 
 class ACPBaseWeapon;
 
+USTRUCT(BlueprintType)
+struct FWeaponData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category = "Weapon")
+    TSubclassOf<ACPBaseWeapon> WeaponClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    UAnimMontage* ReloadAnimMontage;
+};
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class COURSEPROJECT_API UCPWeaponComponent : public UActorComponent
 {
@@ -19,10 +31,11 @@ public:
     void StartFire();
     void StopFire();
     void NextWeapon();
+    void Reload();
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    TArray<TSubclassOf<ACPBaseWeapon>> WeaponClasses;
+    TArray<FWeaponData> WeaponData;
 
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     FName WeaponEquipSocketName = "WeaponSocket";
@@ -42,6 +55,9 @@ private:
 
     UPROPERTY()
     TArray<ACPBaseWeapon*> Weapons;
+
+    UPROPERTY()
+    UAnimMontage* CurrentReloadAnimMontage = nullptr;
 
     int32 CurrentWeaponIndex = 0;
     bool EquipAnimInProgress = false;

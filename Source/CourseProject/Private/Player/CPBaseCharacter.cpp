@@ -79,6 +79,7 @@ void ACPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UCPWeaponComponent::StartFire);
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UCPWeaponComponent::StopFire);
     PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UCPWeaponComponent::NextWeapon);
+    PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &UCPWeaponComponent::Reload);
 }
 
 bool ACPBaseCharacter::IsRunning() const
