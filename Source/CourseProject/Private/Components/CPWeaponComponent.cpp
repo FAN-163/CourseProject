@@ -4,6 +4,7 @@
 #include "Weapon/CPBaseWeapon.h"
 #include "GameFramework/Character.h"
 #include "Animation/CPFinishedAnimNotify.h"
+#include "Animation/CPReloadFinishedAnimNotify.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All)
 
@@ -117,17 +118,18 @@ void UCPWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 
 void UCPWeaponComponent::InitAnimations()
 {
-    if (!EquipAnimMontage) return;
-
-    const auto NotifyEvents = EquipAnimMontage->Notifies;
-    for (auto NotifyEvent : NotifyEvents)
+    auto EquipFinishedNotify = FindNotifyByClass<UCPFinishedAnimNotify>(EquipAnimMontage);
+    if (EquipFinishedNotify)
     {
-        auto EquipFinishedNotify = Cast<UCPFinishedAnimNotify>(NotifyEvent.Notify);
-        if (EquipFinishedNotify)
-        {
-            EquipFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnEquipFinished);
-            break;
-        }
+        EquipFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnEquipFinished);
+    }
+
+    for (auto OneWeaponData : WeaponData)
+    {
+        auto ReloadFinishedNotify = FindNotifyByClass<UCPReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
+        if (ReloadFinishedNotify) continue;
+
+        ReloadFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnReloadFinished);
     }
 }
 void UCPWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
@@ -138,16 +140,32 @@ void UCPWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
     EquipAnimInProgress = false;
 }
 
+void UCPWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
+{
+    ACharacter* Character = Cast<ACharacter>(GetOwner());
+    if (!Character || MeshComponent != Character->GetMesh()) return;
+
+    ReloadAnimProgress = false;
+}
+
 bool UCPWeaponComponent::CanFire() const
 {
-    return CurrentWeapon && !EquipAnimInProgress;
+    return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimProgress;
 }
+
 bool UCPWeaponComponent::CanEquip() const
 {
-    return !EquipAnimInProgress;
+    return !EquipAnimInProgress && !ReloadAnimProgress;
+}
+
+bool UCPWeaponComponent::CanReload() const
+{
+    return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimProgress;
 }
 
 void UCPWeaponComponent::Reload()
 {
+    if (!CanReload()) return;
+    ReloadAnimProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
 }
