@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CPCoreTypes.h"
 #include "CPHealthComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDead);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
+
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class COURSEPROJECT_API UCPHealthComponent : public UActorComponent

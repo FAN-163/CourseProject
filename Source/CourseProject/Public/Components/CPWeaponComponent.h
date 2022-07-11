@@ -4,21 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CPCoreTypes.h"
 #include "CPWeaponComponent.generated.h"
 
 class ACPBaseWeapon;
 
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-    GENERATED_USTRUCT_BODY()
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    TSubclassOf<ACPBaseWeapon> WeaponClass;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    UAnimMontage* ReloadAnimMontage;
-};
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class COURSEPROJECT_API UCPWeaponComponent : public UActorComponent
@@ -80,20 +70,5 @@ private:
     void OnEmptyClip();
     void ChangeClip();
 
-    template <typename T>
-    T* FindNotifyByClass(UAnimSequenceBase* Animation)
-    {
-        if (!Animation) return nullptr;
-
-        const auto NotifyEvents = Animation->Notifies;
-        for (auto NotifyEvent : NotifyEvents)
-        {
-            auto AnimNotify = Cast<T>(NotifyEvent.Notify);
-            if (AnimNotify)
-            {
-                return AnimNotify;
-            }
-        }
-        return nullptr;
-    }
+    
 };
