@@ -63,18 +63,22 @@ private:
     bool EquipAnimInProgress = false;
     bool ReloadAnimProgress = false;
 
+    void InitAnimations();
     void SpawnWeapons();
     void AttachWeaponToSocket(ACPBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
     void EquipWeapon(int32 WeaponIndex);
 
     void PlayAnimMontage(UAnimMontage* Animation);
-    void InitAnimations();
+
     void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
     void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
 
     bool CanFire() const;
     bool CanEquip() const;
     bool CanReload() const;
+
+    void OnEmptyClip();
+    void ChangeClip();
 
     template <typename T>
     T* FindNotifyByClass(UAnimSequenceBase* Animation)

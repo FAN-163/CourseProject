@@ -6,8 +6,8 @@
 
 void ACPRifleWeapon::StartFire()
 {
-    MakeShot();
     GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ACPRifleWeapon::MakeShot, TimeBetweenShots, true);
+    MakeShot();
 }
 void ACPRifleWeapon::StopFire()
 {

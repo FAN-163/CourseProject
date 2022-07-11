@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CPBaseWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature)
+
 class USkeletalMeshComponent;
 
 USTRUCT(BlueprintType)
@@ -14,13 +16,13 @@ struct FAmmoData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    int32 Bullets;
+    int32 Bullets = 15;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
-    int32 Clips;
+    int32 Clips = 10;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    bool Infinite;
+    bool Infinite = false;
 };
 
 UCLASS()
@@ -31,8 +33,13 @@ class COURSEPROJECT_API ACPBaseWeapon : public AActor
 public:
     ACPBaseWeapon();
 
+    FOnClipEmptySignature OnClipEmpty;
+
     virtual void StartFire();
     virtual void StopFire();
+
+    void ChangeClip();
+    bool CanReload() const;
 
 protected:
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
@@ -46,15 +53,14 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FAmmoData DefaultAmmo;
-    
+
     virtual void BeginPlay() override;
 
     virtual void MakeShot();
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
-
     void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd);
-    
+
     APlayerController* GetPlayerController() const;
 
     FVector GetMuzzleWorldLocation() const;
@@ -64,7 +70,7 @@ protected:
     void DecreaseAmmo();
     bool IsAmmoEmpty() const;
     bool IsClipEmpty() const;
-    void ChangeClip();
+
     void LogAmmo();
 
 private:

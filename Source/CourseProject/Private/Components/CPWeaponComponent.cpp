@@ -46,6 +46,7 @@ void UCPWeaponComponent::SpawnWeapons()
         auto Weapon = GetWorld()->SpawnActor<ACPBaseWeapon>(OneWeaponData.WeaponClass);
         if (!Weapon) continue;
 
+        Weapon->OnClipEmpty.AddUObject(this, &UCPWeaponComponent::OnEmptyClip);
         Weapon->SetOwner(Character);
         Weapons.Add(Weapon);
 
@@ -124,11 +125,10 @@ void UCPWeaponComponent::InitAnimations()
         EquipFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnEquipFinished);
     }
 
-    for (auto OneWeaponData : WeaponData)
+    for (auto& OneWeaponData : WeaponData)
     {
         auto ReloadFinishedNotify = FindNotifyByClass<UCPReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
-        if (ReloadFinishedNotify) continue;
-
+        if (!ReloadFinishedNotify) continue;
         ReloadFinishedNotify->OnNotified.AddUObject(this, &UCPWeaponComponent::OnReloadFinished);
     }
 }
@@ -160,12 +160,27 @@ bool UCPWeaponComponent::CanEquip() const
 
 bool UCPWeaponComponent::CanReload() const
 {
-    return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimProgress;
+    return CurrentWeapon            //
+           && !EquipAnimInProgress  //
+           && !ReloadAnimProgress   //
+           && CurrentWeapon->CanReload();
 }
 
 void UCPWeaponComponent::Reload()
 {
+    ChangeClip();
+}
+
+void UCPWeaponComponent::OnEmptyClip()
+{
+    ChangeClip();
+}
+
+void UCPWeaponComponent::ChangeClip()
+{
     if (!CanReload()) return;
+    CurrentWeapon->StopFire();
+    CurrentWeapon->ChangeClip();
     ReloadAnimProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
 }
