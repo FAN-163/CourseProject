@@ -7,9 +7,6 @@
 #include "CPCoreTypes.h"
 #include "CPPlayerHUDWidget.generated.h"
 
-class UCPWeaponComponent;
-class UCPHealthComponent;
-
 UCLASS()
 class COURSEPROJECT_API UCPPlayerHUDWidget : public UUserWidget
 {
@@ -30,8 +27,4 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool IsPlayerSpectating() const;
-
-private:
-    UCPWeaponComponent* GetWeaponComponent() const;
-    UCPHealthComponent* GetHealthComponent() const;
 };

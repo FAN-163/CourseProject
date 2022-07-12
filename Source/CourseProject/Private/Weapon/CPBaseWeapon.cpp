@@ -85,7 +85,6 @@ void ACPBaseWeapon::DecreaseAmmo()
     }
 
     CurrentAmmo.Bullets--;
-    LogAmmo();
 
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
