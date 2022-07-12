@@ -3,7 +3,7 @@
 
 #include "UI/CPGameHUD.h"
 #include "Engine/Canvas.h"
-
+#include "Blueprint/UserWidget.h"
 
 void ACPGameHUD::DrawHUD() 
 {
@@ -11,6 +11,17 @@ void ACPGameHUD::DrawHUD()
 
     DrawCrossHair();
 }
+
+void ACPGameHUD::BeginPlay()
+{
+    Super::BeginPlay();
+    auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
+    if (PlayerHUDWidget)
+    {
+        PlayerHUDWidget->AddToViewport();
+    }
+}
+
 
 void ACPGameHUD::DrawCrossHair() 
 {
