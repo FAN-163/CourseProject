@@ -25,7 +25,9 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/Dev",
             "CourseProject/Public/Weapon",
             "CourseProject/Public/UI",
-            "CourseProject/Public/Animation"
+            "CourseProject/Public/Animation",
+            "CourseProject/Public/Pickups"
+
 
         });
 
