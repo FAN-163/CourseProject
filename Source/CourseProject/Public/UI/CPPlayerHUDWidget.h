@@ -7,6 +7,8 @@
 #include "CPCoreTypes.h"
 #include "CPPlayerHUDWidget.generated.h"
 
+class UCPWeaponComponent;
+
 UCLASS()
 class COURSEPROJECT_API UCPPlayerHUDWidget : public UUserWidget
 {
@@ -17,5 +19,11 @@ public:
     float GetHealthPercent() const;
 
     UFUNCTION(BlueprintCallable, Category = "UI")
-    bool GetWeaponUIData(FWeaponUIData& UIData) const;
+    bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
+
+private:
+    UCPWeaponComponent* GetWeaponComponent() const;
 };
