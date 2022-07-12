@@ -22,7 +22,7 @@ void UCPWeaponComponent::BeginPlay()
 
     checkf(WeaponData.Num() == WeaponNum, TEXT("Our character cen hold only %i weapon items"), WeaponNum)
 
-    CurrentWeaponIndex = 0;
+        CurrentWeaponIndex = 0;
     InitAnimations();
     SpawnWeapons();
     EquipWeapon(CurrentWeaponIndex);
@@ -197,4 +197,14 @@ void UCPWeaponComponent::ChangeClip()
     CurrentWeapon->ChangeClip();
     ReloadAnimProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
+}
+
+bool UCPWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+{
+    if (CurrentWeapon)
+    {
+        UIData = CurrentWeapon->GetUIData();
+        return true;
+    }
+    return false;
 }
