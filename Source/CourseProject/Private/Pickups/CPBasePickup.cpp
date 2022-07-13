@@ -21,11 +21,15 @@ void ACPBasePickup::BeginPlay()
     Super::BeginPlay();
 
     check(CollisionComponent);
+
+    GenerateRotationYaq();
 }
 
 void ACPBasePickup::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
 }
 
 void ACPBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -58,9 +62,17 @@ void ACPBasePickup::PickupWasTaken()
 
 void ACPBasePickup::Respawn()
 {
+    GenerateRotationYaq();
+
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
     if (GetRootComponent())
     {
         GetRootComponent()->SetVisibility(true, true);
     }
+}
+
+void ACPBasePickup::GenerateRotationYaq()
+{
+    const auto Direction = FMath::RandBool() ? 1.0f : -1.0f;
+    RotationYaw = FMath::RandRange(1.0f, 2.0f) * Direction;
 }
