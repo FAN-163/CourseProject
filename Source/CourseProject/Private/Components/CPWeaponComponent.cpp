@@ -185,9 +185,24 @@ void UCPWeaponComponent::Reload()
     ChangeClip();
 }
 
-void UCPWeaponComponent::OnEmptyClip()
+void UCPWeaponComponent::OnEmptyClip(ACPBaseWeapon* AmmoEmptyWeapon)
 {
-    ChangeClip();
+    if (!AmmoEmptyWeapon) return;
+
+    if (CurrentWeapon ==AmmoEmptyWeapon)
+    {
+        ChangeClip();
+    }
+    else
+    {
+        for (const auto Weapon: Weapons)
+        {
+            if (Weapon == AmmoEmptyWeapon)
+            {
+                Weapon->ChangeClip();
+            }
+        }
+    }
 }
 
 void UCPWeaponComponent::ChangeClip()
@@ -215,6 +230,18 @@ bool UCPWeaponComponent::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
     {
         AmmoData = CurrentWeapon->GetAmmoData();
         return true;
+    }
+    return false;
+}
+
+bool UCPWeaponComponent::TryToAddAmmo(TSubclassOf<ACPBaseWeapon> WeaponType, int32 ClipsAmount)
+{
+    for (const auto Weapon : Weapons)
+    {
+        if (Weapon && Weapon->IsA(WeaponType))
+        {
+            return Weapon->TryToAddAmmo(ClipsAmount);
+        }
     }
     return false;
 }

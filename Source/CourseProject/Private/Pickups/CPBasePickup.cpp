@@ -37,8 +37,6 @@ void ACPBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
     {
         PickupWasTaken();
     }
-
-    PickupWasTaken();
 }
 
 bool ACPBasePickup::GivePickupTo(APawn* PlayerPawn)
