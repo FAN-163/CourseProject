@@ -13,7 +13,8 @@ public class CourseProject : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
-            "InputCore"
+            "InputCore",
+            "Niagara"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
@@ -26,9 +27,8 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/Weapon",
             "CourseProject/Public/UI",
             "CourseProject/Public/Animation",
-            "CourseProject/Public/Pickups"
-
-
+            "CourseProject/Public/Pickups",
+            "CourseProject/Public/Weapon/Components"
         });
 
         // Uncomment if you are using Slate UI
