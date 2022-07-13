@@ -50,11 +50,13 @@ bool ACPBasePickup::GivePickupTo(APawn* PlayerPawn)
 
 void ACPBasePickup::PickupWasTaken()
 {
-    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    
     if (GetRootComponent())
     {
         GetRootComponent()->SetVisibility(false, true);
     }
+
+    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
     FTimerHandle RespawnTimeHandle;
     GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACPBasePickup::Respawn, RespawnTime);
