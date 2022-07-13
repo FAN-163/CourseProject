@@ -6,12 +6,11 @@
 #include "Pickups/CPBasePickup.h"
 #include "CPHealthPickup.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class COURSEPROJECT_API ACPHealthPickup : public ACPBasePickup
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
+private:
+    virtual bool GivePickupTo(APawn* PlayerPawn) override;
 };
