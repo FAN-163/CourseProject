@@ -7,6 +7,8 @@
 #include "CPRifleWeapon.generated.h"
 
 class UCPWeaponFXComponent;
+class UNiagaraComponent;
+
 UCLASS()
 class COURSEPROJECT_API ACPRifleWeapon : public ACPBaseWeapon
 {
@@ -37,5 +39,10 @@ protected:
 private:
     FTimerHandle ShotTimerHandle;
 
+    UPROPERTY();
+    UNiagaraComponent* MuzzleFXComponent;
+
     void MakeDamage(const FHitResult& HitResult);
+    void InitMuzzleFX();
+    void SetMuzzleFXVisibility(bool Vizible);
 };
