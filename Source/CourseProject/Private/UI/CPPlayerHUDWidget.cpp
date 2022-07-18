@@ -5,6 +5,25 @@
 #include "Components/CPWeaponComponent.h"
 #include "CPUtils.h"
 
+bool UCPPlayerHUDWidget::Initialize()
+{
+    const auto HealthComponent = CPUtils::GetCPPlayerComponent<UCPHealthComponent>(GetOwningPlayerPawn());
+    if (HealthComponent)
+    {
+        HealthComponent->OnHealthChanged.AddUObject(this, &UCPPlayerHUDWidget::OnHealthChange);
+    }
+
+    return Super::Initialize();
+}
+
+void UCPPlayerHUDWidget::OnHealthChange(float Health, float HealthDelta)
+{
+    if (HealthDelta < 0.0f)
+    {
+        OnTakeDamage();
+    }
+}
+
 float UCPPlayerHUDWidget::GetHealthPercent() const
 {
 
