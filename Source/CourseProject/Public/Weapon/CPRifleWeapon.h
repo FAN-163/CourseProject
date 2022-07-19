@@ -8,6 +8,7 @@
 
 class UCPWeaponFXComponent;
 class UNiagaraComponent;
+class UNiagaraSystem;
 
 UCLASS()
 class COURSEPROJECT_API ACPRifleWeapon : public ACPBaseWeapon
@@ -29,6 +30,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 10.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* TraceFX;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    FString TraceTargetName = "TraceTarget";
+
     UPROPERTY(VisibleAnywhere, Category = "VFX")
     UCPWeaponFXComponent* WeaponFXComponent;
 
@@ -45,4 +52,5 @@ private:
     void MakeDamage(const FHitResult& HitResult);
     void InitMuzzleFX();
     void SetMuzzleFXVisibility(bool Vizible);
+    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 };
