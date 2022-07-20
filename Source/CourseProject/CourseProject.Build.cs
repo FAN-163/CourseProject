@@ -15,7 +15,9 @@ public class CourseProject : ModuleRules
             "Engine",
             "InputCore",
             "Niagara",
-            "PhysicsCore"
+            "PhysicsCore",
+            "GameplayTasks",
+            "NavigationSystem"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
@@ -30,8 +32,8 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/Animation",
             "CourseProject/Public/Pickups",
             "CourseProject/Public/Weapon/Components",
-            "CourseProject/Public/AI"
-
+            "CourseProject/Public/AI",
+            "CourseProject/Public/AI/Tasks"
         });
 
         // Uncomment if you are using Slate UI
