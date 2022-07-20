@@ -29,7 +29,9 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/UI",
             "CourseProject/Public/Animation",
             "CourseProject/Public/Pickups",
-            "CourseProject/Public/Weapon/Components"
+            "CourseProject/Public/Weapon/Components",
+            "CourseProject/Public/AI"
+
         });
 
         // Uncomment if you are using Slate UI
