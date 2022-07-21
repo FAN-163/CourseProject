@@ -10,4 +10,7 @@ UCLASS()
 class COURSEPROJECT_API ACPAIController : public AAIController
 {
     GENERATED_BODY()
+
+protected:
+    virtual void OnPossess(APawn* InPawn) override;
 };
