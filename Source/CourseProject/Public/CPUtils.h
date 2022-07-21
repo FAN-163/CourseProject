@@ -5,7 +5,7 @@ class CPUtils
 {
 public:
     template<typename T>
-    static T* GetCPPlayerComponent(APawn* PlayerPawn)
+    static T* GetCPPlayerComponent(AActor* PlayerPawn)
     {
         if (!PlayerPawn) return nullptr;
 

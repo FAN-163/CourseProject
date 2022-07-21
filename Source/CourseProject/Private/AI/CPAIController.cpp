@@ -2,6 +2,13 @@
 
 #include "AI/CPAIController.h"
 #include "AI/CPAICharacter.h"
+#include "Components/CPAIPerceptionComponent.h"
+
+ACPAIController::ACPAIController()
+{
+    CPAIPerceptionComponent = CreateDefaultSubobject<UCPAIPerceptionComponent>("CPAIPerceptionComponent");
+    SetPerceptionComponent(*CPAIPerceptionComponent);
+}
 
 void ACPAIController::OnPossess(APawn* InPawn)
 {
@@ -12,4 +19,11 @@ void ACPAIController::OnPossess(APawn* InPawn)
     {
         RunBehaviorTree(CPCharacter->BehaviorTreeAsset);
     }
+}
+
+void ACPAIController::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    const auto AimActor = CPAIPerceptionComponent->GetClosestEnemy();
+    SetFocus(AimActor);
 }
