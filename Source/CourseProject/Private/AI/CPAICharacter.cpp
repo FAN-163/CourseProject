@@ -3,8 +3,10 @@
 #include "AI/CPAICharacter.h"
 #include "AI/CPAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CPAIWeaponComponent.h"
 
-ACPAICharacter::ACPAICharacter(const FObjectInitializer& ObjInit):Super(ObjInit)
+ACPAICharacter::ACPAICharacter(const FObjectInitializer& ObjInit)
+    : Super(ObjInit.SetDefaultSubobjectClass<UCPAIWeaponComponent>("WeaponComponent"))
 {
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
     AIControllerClass = ACPAIController::StaticClass();

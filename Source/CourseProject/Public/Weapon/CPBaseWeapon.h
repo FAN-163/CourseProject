@@ -7,7 +7,6 @@
 #include "CPCoreTypes.h"
 #include "CPBaseWeapon.generated.h"
 
-
 class USkeletalMeshComponent;
 class UNiagaraSystem;
 class UNiagaraComponent;
@@ -32,6 +31,7 @@ public:
     FAmmoData GetAmmoData() const { return CurrentAmmo; }
 
     bool TryToAddAmmo(int32 ClipsAmount);
+    bool IsAmmoEmpty() const;
 
 protected:
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
@@ -66,7 +66,6 @@ protected:
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 
     void DecreaseAmmo();
-    bool IsAmmoEmpty() const;
     bool IsClipEmpty() const;
     bool IsAmmoFull() const;
 
