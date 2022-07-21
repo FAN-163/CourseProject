@@ -12,7 +12,6 @@ class UCPHealthComponent;
 class UTextRenderComponent;
 class UCPWeaponComponent;
 
-    
 UCLASS()
 class COURSEPROJECT_API ACPBaseCharacter : public ACharacter
 {
@@ -33,7 +32,7 @@ protected:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UTextRenderComponent* HealthTextComponent;
-    
+
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UCPWeaponComponent* WeaponComponent;
 
@@ -48,10 +47,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
-    
-    
 
     virtual void BeginPlay() override;
+    virtual void OnDeath();
 
 public:
     virtual void Tick(float DeltaTime) override;
@@ -64,7 +62,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Movement")
     float GetMovementDirection() const;
 
-
 private:
     bool WantsToRun = false;
     bool IsMovingForward = false;
@@ -75,10 +72,8 @@ private:
     void OnStartRunning();
     void OnStopRunning();
 
-    void OnDeath();
     void OnHealthChanged(float Health, float HealthDelta);
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
-
 };
