@@ -33,7 +33,9 @@ public class CourseProject : ModuleRules
             "CourseProject/Public/Pickups",
             "CourseProject/Public/Weapon/Components",
             "CourseProject/Public/AI",
-            "CourseProject/Public/AI/Tasks"
+            "CourseProject/Public/AI/Tasks",
+            "CourseProject/Public/AI/Services"
+
         });
 
         // Uncomment if you are using Slate UI

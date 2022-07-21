@@ -3,6 +3,7 @@
 #include "AI/CPAIController.h"
 #include "AI/CPAICharacter.h"
 #include "Components/CPAIPerceptionComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ACPAIController::ACPAIController()
 {
@@ -24,6 +25,12 @@ void ACPAIController::OnPossess(APawn* InPawn)
 void ACPAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    const auto AimActor = CPAIPerceptionComponent->GetClosestEnemy();
+    const auto AimActor = GetFocusOnActor();
     SetFocus(AimActor);
+}
+
+AActor* ACPAIController::GetFocusOnActor() const
+{
+    if (!GetBlackboardComponent()) return nullptr;
+    return Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(FocusOnKeyName));
 }
